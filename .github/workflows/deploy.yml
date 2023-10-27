@@ -5,9 +5,8 @@ on:
     branches:
     - main
 env:
-  
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: aca-demo-orleans-cluster
+  RESOURCE_GROUP_NAME: aca-demo-orleans
 
   # specify your preferred region
   REGION: eastus
