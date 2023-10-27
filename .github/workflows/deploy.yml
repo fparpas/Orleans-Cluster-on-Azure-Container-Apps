@@ -175,7 +175,7 @@ jobs:
       uses: azure/CLI@v1
       with:
         inlineScript: >
-          echo "Deploying Silo
+          echo "Deploying Silo"
           
           az containerapp up -n silo -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.ACR_LOGIN_SERVER }}/${{ env.SILO_IMAGE_NAME }}:${{ github.sha }}
 
