@@ -8,7 +8,7 @@ on:
 env:
   
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: aca-demo-orleans
+  RESOURCE_GROUP_NAME: aca-demo-orleans-cluster
 
   # specify your preferred region
   REGION: eastus
@@ -30,7 +30,6 @@ env:
 
 jobs:
   provision:
-    if: false
     runs-on: ubuntu-latest
 
     steps:
@@ -62,7 +61,6 @@ jobs:
           az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './Azure/main.bicep' --debug
 
   build:
-    if: false
     runs-on: ubuntu-latest
     needs: provision
     
@@ -132,7 +130,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    # needs: build
+    needs: build
 
     steps:
 
@@ -181,7 +179,7 @@ jobs:
           
           # az containerapp registry set -n silo -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.ACR_LOGIN_SERVER }}
 
-          az containerapp up -n silo -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.ACR_LOGIN_SERVER }}/${{ env.SILO_IMAGE_NAME }}:aa111c2dba955377d8a9cfa92d2ff47122ac2391
+          az containerapp up -n silo -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.ACR_LOGIN_SERVER }}/${{ env.SILO_IMAGE_NAME }}:${{ github.sha }}
 
     - name: Deploy Dashboard
       uses: azure/CLI@v1
@@ -191,7 +189,7 @@ jobs:
           
           # az containerapp registry set -n dashboard -g ${{ env.RESOURCE_GROUP_NAME }} --server ${{ env.ACR_LOGIN_SERVER }}
 
-          az containerapp up -n dashboard -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.ACR_LOGIN_SERVER }}/${{ env.DASHBOARD_IMAGE_NAME }}:aa111c2dba955377d8a9cfa92d2ff47122ac2391
+          az containerapp up -n dashboard -g ${{ env.RESOURCE_GROUP_NAME }} -i ${{ env.ACR_LOGIN_SERVER }}/${{ env.DASHBOARD_IMAGE_NAME }}:${{ github.sha }}
 
     - name: Deploy Minimal API Client
       uses: azure/CLI@v1
