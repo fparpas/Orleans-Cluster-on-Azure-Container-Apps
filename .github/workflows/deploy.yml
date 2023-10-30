@@ -2,8 +2,14 @@ name: Build and deploy .NET application to Container App silo
  
 on:
   push:
-    branches:
-    - main
+      paths:
+      - 'Silo/**'
+      - 'Dashboard/**'
+      - 'Clients.MinimalApi/**'
+      - 'Clients.WorkerService/**'
+      - 'Scaler/**'
+      branches:
+      - main
 env:
   # alphanumeric string under 14 characters
   RESOURCE_GROUP_NAME: aca-demo-orleans
