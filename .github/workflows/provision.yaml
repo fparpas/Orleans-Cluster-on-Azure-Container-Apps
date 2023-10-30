@@ -1,0 +1,58 @@
+name: Provision Container App environment
+ 
+on:
+  woworkflow_dispatch
+  
+  env:
+  # alphanumeric string under 14 characters
+  RESOURCE_GROUP_NAME: aca-demo-orleans
+
+  # specify your preferred region
+  REGION: eastus
+
+  SILO_DOCKER_FILE_PATH: Silo/Dockerfile
+  SILO_IMAGE_NAME: silo
+
+  DASHBOARD_DOCKER_FILE_PATH: Dashboard/Dockerfile
+  DASHBOARD_IMAGE_NAME: dashboard
+
+  MINIMAL_CLIENT_DOCKER_FILE_PATH: Clients.MinimalApi/Dockerfile
+  MINIMAL_CLIENT_IMAGE_NAME: minimalapiclient
+
+  WORKERSERVICE_CLIENT_DOCKER_FILE_PATH: Clients.WorkerService/Dockerfile
+  WORKERSERVICE_CLIENT_IMAGE_NAME: workerserviceclient
+
+  SCALER_DOCKER_FILE_PATH: Scaler/Dockerfile
+  SCALER_IMAGE_NAME: scaler
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout to the branch
+      uses: actions/checkout@v2
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AzureSPN }}
+
+    - name: Create resource group
+      uses: azure/CLI@v1
+      with:
+        inlineScript: >
+          echo "Creating resource group in Azure"
+          echo "Executing 'az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}'"
+
+          az group create -l ${{ env.REGION }} -n ${{ env.RESOURCE_GROUP_NAME }}
+
+    - name: Creating resources
+      uses: azure/CLI@v1
+      with:
+        inlineScript: >
+          echo "Creating resources"
+          echo "Executing az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './Azure/main.bicep' --debug"
+
+          az deployment group create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --template-file './Azure/main.bicep' --debug
