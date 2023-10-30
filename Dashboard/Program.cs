@@ -15,7 +15,7 @@ builder.Host.UseOrleans(siloBuilder =>
         })
         .Configure<SiloOptions>(options =>
         {
-            options.SiloName = "Dashboard 4";
+            options.SiloName = "Dashboard";
         })
         .ConfigureEndpoints(siloPort: 11_112, gatewayPort: 30_001)
         .UseAzureStorageClustering(options => options.ConfigureTableServiceClient(builder.Configuration.GetValue<string>("StorageConnectionString")))
