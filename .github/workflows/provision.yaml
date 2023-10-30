@@ -1,9 +1,9 @@
 name: Provision Container App environment
  
 on:
-  workflow_dispatch
+  workflow_dispatch:
    
-  env:
+env:
   # alphanumeric string under 14 characters
   RESOURCE_GROUP_NAME: aca-demo-orleans
 
