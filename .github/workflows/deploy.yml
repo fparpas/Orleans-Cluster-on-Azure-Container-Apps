@@ -1,6 +1,7 @@
 name: Build and deploy .NET application to Container App silo
  
 on:
+  workflow_dispatch:
   push:
       paths:
       - 'Silo/**'
@@ -12,7 +13,7 @@ on:
       - main
 env:
   # alphanumeric string under 14 characters
-  RESOURCE_GROUP_NAME: aca-demo-orleans
+  RESOURCE_GROUP_NAME: ${{vars.RESOURCE_GROUP_NAME}}
 
   # specify your preferred region
   REGION: eastus
